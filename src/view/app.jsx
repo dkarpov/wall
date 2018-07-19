@@ -18,7 +18,7 @@ class App extends Component {
     validateForm = (login, pass) => {
         const strongPass = new RegExp(this.props.regExpValidator);
 
-        if (/*strongPass.test(pass) && */(login.length > this.props.minPassLength)) {
+        if (strongPass.test(pass) && (login.length > this.props.minPassLength)) {
             this.setState({ invalidLogin: false });
             this.setState({ loggedIn: true });
         }
