@@ -1,49 +1,54 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import PropTypes from 'prop-types';
+import './wall.less'
+import classNames from 'classnames/bind';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
+    this.pass = null;
+    this.login = null;
+
     this.state = {
-      email: "",
-      password: ""
+      invalidLogin: false,
     };
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
+    const strongPass = new RegExp(this.props.regExpValidator);
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    if (strongPass.test(this.pass.value) && (this.login.value.length < this.props.minPassLength)) {
+      console.log(this.pass.value);
+      this.setState({invalidLogin: false});
+    }
+    else
+      this.setState({invalidLogin: true});
   }
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault(event.target);
+    this.validateForm();
   }
 
   render() {
     return (
-      <div class="login-page">
-        <div class="form">
-          <form class="register-form">
-            <input type="text" placeholder="name"/>
-            <input type="password" placeholder="password"/>
-            <input type="text" placeholder="email address"/>
-            <button>create</button>
-            <p class="message">Already registered? <a href="#">Sign In</a></p>
-          </form>
-          <form class="login-form">
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
-            <button>login</button>
-            <p class="message">Not registered? <a href="#">Create an account</a></p>
+      <div className="login-page">
+      <p>Welcome</p>
+        <div className="form">
+          <form className="login-form">
+            <input ref={node => this.login = node} type="text" placeholder="username" />
+            <input ref={node => this.pass = node} type="password" placeholder="password" />
+            <button onClick={this.handleSubmit}>login</button>
+              <label className={classNames('warning', {enabled: this.state.invalidLogin})}>Password/Login too weak</label>
           </form>
         </div>
       </div>
     );
   }
 }
+
+Login.defaultProps = {
+  minPassLength: 5,
+  regExpValidator: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"
+};

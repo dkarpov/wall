@@ -1,11 +1,9 @@
 {
   "presets": [
-      "env", "react", "stage-3"
+      "env", "react"
   ],
   "plugins": [
     "transform-object-rest-spread", 
-    "transform-class-properties",
-    "transform-decorators-legacy",
-    "transform-runtime"
+    "transform-class-properties"
   ]
 }
