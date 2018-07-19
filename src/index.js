@@ -1,12 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Login from './view/loginform.jsx';
-import './view/wall.less';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import App from './view/app.jsx';
+import store from './redux';
 
-const Index = () => {
-  return <div>
-    <Login/>
-  </div>;
-};
-
-ReactDOM.render(<Index />, document.getElementById("root"));
+ReactDOM.render(
+<Provider store={store}>
+  <App/>
+</Provider>, document.getElementById("root"));

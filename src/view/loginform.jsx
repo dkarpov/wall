@@ -2,33 +2,17 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import './wall.less'
 import classNames from 'classnames/bind';
+import { connect } from 'react-redux'
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
-
-    this.pass = null;
-    this.login = null;
-
-    this.state = {
-      invalidLogin: false,
-    };
   }
 
-  validateForm() {
-    const strongPass = new RegExp(this.props.regExpValidator);
-
-    if (strongPass.test(this.pass.value) && (this.login.value.length < this.props.minPassLength)) {
-      console.log(this.pass.value);
-      this.setState({invalidLogin: false});
-    }
-    else
-      this.setState({invalidLogin: true});
-  }
 
   handleSubmit = event => {
     event.preventDefault(event.target);
-    this.validateForm();
+    this.props.validationCallback(this.login.value, this.pass.value)
   }
 
   render() {
@@ -40,7 +24,7 @@ export default class Login extends Component {
             <input ref={node => this.login = node} type="text" placeholder="username" />
             <input ref={node => this.pass = node} type="password" placeholder="password" />
             <button onClick={this.handleSubmit}>login</button>
-              <label className={classNames('warning', {enabled: this.state.invalidLogin})}>Password/Login too weak</label>
+              <label className={classNames('warning', {enabled: this.props.warning})}>Password/Login too weak</label>
           </form>
         </div>
       </div>
@@ -52,3 +36,20 @@ Login.defaultProps = {
   minPassLength: 5,
   regExpValidator: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"
 };
+
+const mapStateToProps = state => {
+  return {
+    posts: []//state.posts
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loging: () =>
+      dispatch({
+        type: 'USER_LOGIN'
+      })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

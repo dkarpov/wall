@@ -15,14 +15,15 @@
   }
 
   form input {
-    margin-bottom: 1rem;
+    margin-bottom: 3px;
     background: #fff;
     border: 1px solid #9c9c9c;
   }
 
   form button {
     background: lightgrey;
-    padding: 0.7em;
+    margin: 6px;
+    padding: 5px;
     border: 0;
   }
 
@@ -32,8 +33,8 @@
   
   input {
     width: 100%;
-    padding: 0.7em;
-    margin-bottom: 0.5rem;
+    padding: 5px;
+    margin-bottom: 3px;
   }
 
   input:focus {
@@ -48,3 +49,27 @@
       }
   }
 }
+
+.flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    
+    justify-content: space-around;
+  }
+  
+  .flex-item {
+    background: tomato;
+    padding: 5px;
+    width: 200px;
+    height: 150px;
+    margin-top: 10px;
+    
+    line-height: 150px;
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+    text-align: center;
+  }
