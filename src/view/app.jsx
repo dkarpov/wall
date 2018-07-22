@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Login from './loginform.jsx';
 import './wall.less';
+import {Post} from './post';
+import {Header} from './header';
 
 const urlPath = "https://jsonplaceholder.typicode.com/posts";
 
@@ -10,15 +12,15 @@ class App extends Component {
 
         this.state = {
             invalidLogin: false,
-            loggedIn: false
+            loggedIn: false,
+            filterString: null
         };
-
     }
 
     validateForm = (login, pass) => {
         const strongPass = new RegExp(this.props.regExpValidator);
 
-        if (strongPass.test(pass) && (login.length > this.props.minPassLength)) {
+        if (/*strongPass.test(pass) &&*/ (login.length > this.props.minPassLength)) {
             this.setState({ invalidLogin: false });
             this.setState({ loggedIn: true });
         }
@@ -36,12 +38,32 @@ class App extends Component {
 
     transferComplete = (evt) => {
         console.log("The transfer is complete.");
-        this.setState({ posts: evt.target.response });
+        const posts = JSON.parse(evt.target.response).reverse();
+        this.setState({ posts });
     }
 
     transferFailed = (evt) => {
         console.log("An error occurred while transferring the file.", evt);
         this.setState({ error: evt.type });
+    }
+
+    updateSearchString = (searchStr) => {
+        console.log('updateSearchString', searchStr);
+        this.setState({
+            filterString: searchStr
+        });
+    }
+
+    postsFilterFunction = (post) => {
+        const filterString = this.state.filterString;
+
+        if (!filterString || filterString.length == 0)
+            return true;
+
+        if (post.title.includes(filterString) || post.body.includes(filterString))
+            return true;
+        else
+            return false;
     }
 
     render() {
@@ -53,14 +75,14 @@ class App extends Component {
         }
 
         if (this.state.loggedIn && this.state.posts.length) {
-            console.log(this.state.posts)
-            const posts = Array.from(this.state.posts).map((post) =>
-                <Post key={post.id} id={post.id} title={post.title} body={post.body} />
+            const fitleredPosts = this.state.posts.reverse().filter(this.postsFilterFunction);
+            const posts = fitleredPosts.map((post) =>
+                <Post key={post.id} {...post}/>
             );
 
             domElement =
                 <div>
-                    <input className='search' placeholder="search posts" />
+                    <Header updateSearch={this.updateSearchString}/>
                     <div className='flex-container'>
                         {posts}
                     </div>
@@ -81,12 +103,3 @@ App.defaultProps = {
 };
 
 export default App
-
-function Post({id, title, body}) {
-    
-    return (
-        <div className='flex-item'>
-            TEST POST
-        </div>
-    );
-}

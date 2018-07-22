@@ -32,11 +32,6 @@ class Login extends Component {
   }
 }
 
-Login.defaultProps = {
-  minPassLength: 5,
-  regExpValidator: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"
-};
-
 const mapStateToProps = state => {
   return {
     posts: []//state.posts
