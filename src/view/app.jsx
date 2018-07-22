@@ -82,6 +82,11 @@ class App extends Component {
         return posts;
     }
 
+    logOut = () => {
+        this.setState({ invalidLogin: false });
+        this.setState({ loggedIn: false });
+    }
+
     render() {
         let domElement = null;
 
@@ -95,7 +100,6 @@ class App extends Component {
             const post = this.state.posts.filter((post) => {
                 return post.id == this.props.openedPost;
             })[0];
-
             const mergedProps = {...post, closePostAction: this.props.closePostActon}
 
             domElement = <OpenedPost {...mergedProps}/>
@@ -103,7 +107,7 @@ class App extends Component {
         else if (this.state.loggedIn && this.state.posts.length) {
             const posts = this.getFilteredPosts();
             domElement = <div>
-                <Header updateSearch={this.updateSearchString} />
+                <Header updateSearch={this.updateSearchString} logOut={this.logOut}/>
                 <div className='flex-container'>
                     {posts}
                 </div>

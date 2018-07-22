@@ -1,9 +1,9 @@
 import React from "react";
 
-function Header(updateSearch) {
+function Header({updateSearch, logOut}) {
     return (
         <div className='header'>
-            <button>Log out</button>
+            <button onClick={(evt) => logOut()}>Log out</button>
             <input className='search'
                 placeholder="search posts"
                 onKeyDown={handleSearch.bind(updateSearch)}
