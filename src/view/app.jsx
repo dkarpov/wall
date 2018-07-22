@@ -1,8 +1,12 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import Login from './loginform.jsx';
 import './wall.less';
-import {Post} from './post';
-import {Header} from './header';
+import Post from './post.jsx';
+import { Header } from './header';
+import { bindActionCreators } from 'redux';
+import { openPostActon, closePostActon } from '../redux/actions';
+import { OpenedPost } from './opened-post';
 
 const urlPath = "https://jsonplaceholder.typicode.com/posts";
 
@@ -48,7 +52,6 @@ class App extends Component {
     }
 
     updateSearchString = (searchStr) => {
-        console.log('updateSearchString', searchStr);
         this.setState({
             filterString: searchStr
         });
@@ -66,6 +69,19 @@ class App extends Component {
             return false;
     }
 
+    openPost = (postId) => {
+        this.setState({ openedPost: postId });
+    }
+
+    getFilteredPosts = () => {
+        const fitleredPosts = this.state.posts.filter(this.postsFilterFunction);
+        const posts = fitleredPosts.map((post) => {
+            return (<Post key={post.id} {...post} />);
+        });
+
+        return posts;
+    }
+
     render() {
         let domElement = null;
 
@@ -74,19 +90,24 @@ class App extends Component {
             window.alert(this.state.error);
         }
 
-        if (this.state.loggedIn && this.state.posts.length) {
-            const fitleredPosts = this.state.posts.reverse().filter(this.postsFilterFunction);
-            const posts = fitleredPosts.map((post) =>
-                <Post key={post.id} {...post}/>
-            );
+        if (this.props.openedPost && this.state.loggedIn) {
 
-            domElement =
-                <div>
-                    <Header updateSearch={this.updateSearchString}/>
-                    <div className='flex-container'>
-                        {posts}
-                    </div>
+            const post = this.state.posts.filter((post) => {
+                return post.id == this.props.openedPost;
+            })[0];
+
+            const mergedProps = {...post, closePostAction: this.props.closePostActon}
+
+            domElement = <OpenedPost {...mergedProps}/>
+        }
+        else if (this.state.loggedIn && this.state.posts.length) {
+            const posts = this.getFilteredPosts();
+            domElement = <div>
+                <Header updateSearch={this.updateSearchString} />
+                <div className='flex-container'>
+                    {posts}
                 </div>
+            </div>
         }
         else
             domElement = <Login validationCallback={this.validateForm} warning={this.state.invalidLogin} />
@@ -102,4 +123,7 @@ App.defaultProps = {
     regExpValidator: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"
 };
 
-export default App
+const mapStateToProps = state => ({ openedPost: state.openedPost });
+const mapDispatchToProps = dispatch => bindActionCreators({ openPostActon, closePostActon }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

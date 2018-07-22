@@ -1,23 +1,26 @@
+import {actionTypes} from './actions';
+
 const defaultState = {
   posts: [{
     id: '0', 
     title: 'Hello',
     body: 'Welcome back!',
-  }], loggedIn: false
+  }], loggedIn: false, openedPost: null
 }
 
 const postsReducer = (state = defaultState, action) => {
+  console.log(action);
+  
   switch(action.type){
-    case "USER_LOGIN":
-      return {...state, loggedIn: true};
+    case actionTypes.OPEN_POST:
+      return {...state, openedPost: action.postId};
       
-    case "DATA_LOADED":
-      return state.posts = [...state.post, ...action.data];
+      case actionTypes.CLOSE_POST:
+      return {...state, openedPost: null};
       
     default:
       return state;
   }
-  return state;
 }
 
 export default postsReducer;

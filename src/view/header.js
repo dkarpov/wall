@@ -18,14 +18,12 @@ function handleSearch(event) {
     event.persist();
 
     setTimeout(() => {
-        console.log(this, event);
         const searchQueryStr = event.target.value;
 
         if (searchQueryStr && searchQueryStr.trim().length > 0) {
-            console.log(searchQueryStr);
             this.updateSearch(searchQueryStr);
         }
-    }, 500);
+    }, 1000);
 }
 
 export { Header };
