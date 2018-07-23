@@ -16,12 +16,13 @@ function Header({updateSearch, logOut}) {
 function handleSearch(event) {
     // react event pooling
     event.persist();
+    console.log(this);
 
     setTimeout(() => {
         const searchQueryStr = event.target.value;
 
         if (searchQueryStr && searchQueryStr.trim().length > 0) {
-            this.updateSearch(searchQueryStr);
+            this(searchQueryStr);
         }
     }, 1000);
 }
