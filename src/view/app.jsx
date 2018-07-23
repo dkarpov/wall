@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import Login from './loginform.jsx';
 import './wall.less';
 import Post from './post.jsx';
-import { Header } from './header';
+import { Header, OpenedPost } from './functional-components';
 import { bindActionCreators } from 'redux';
 import { openPostActon, closePostActon } from '../redux/actions';
-import { OpenedPost } from './opened-post';
 
 const urlPath = "https://jsonplaceholder.typicode.com/posts";
 
