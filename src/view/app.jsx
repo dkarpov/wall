@@ -14,6 +14,8 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        console.log(props);
+
         this.state = {
             invalidLogin: false,
             loggedIn: false,
@@ -95,10 +97,10 @@ class App extends Component {
             window.alert(this.state.error);
         }
 
-        if (this.props.openedPost && this.state.loggedIn) {
-
+        if (this.state.loggedIn && this.props.urlWallPost /*&& this.props.openedPost*/) {
+            console.log(this.props.urlWallPost);
             const post = this.state.posts.filter((post) => {
-                return post.id == this.props.openedPost;
+                return post.id == this.props.urlWallPost;
             })[0];
             const mergedProps = {...post, closePostAction: this.props.closePostActon}
 
@@ -127,7 +129,8 @@ App.defaultProps = {
     regExpValidator: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"
 };
 
-const mapStateToProps = state => ({ openedPost: state.openedPost });
+const mapStateToProps = (state, ownProps) => ({ 
+    openedPost: state.openedPost, urlWallPost: ownProps.match.params.wallposts});
 const mapDispatchToProps = dispatch => bindActionCreators({ openPostActon, closePostActon }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
