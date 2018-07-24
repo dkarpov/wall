@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Header({updateSearch, logOut}) {
     return (
@@ -34,9 +34,9 @@ const OpenedPost = (props) => {
     console.log(props);
     return (
             <div className='openedPost'>
-                <NavLink to={`/`}>
+                <Link to={`/wall`}>
                     <button onClick={(evt) => props.closePostAction()}>Go back</button>
-                </NavLink>
+                </Link>
                 <div className='postContent'>
                     <h1>Details</h1>
                     <span>{`USerID: ${props.id}`}</span>
@@ -48,4 +48,12 @@ const OpenedPost = (props) => {
     );
 }
 
-export { Header, OpenedPost };
+const NotFound = () =>
+  <div>
+    <h3>404 page not found</h3>
+    <p>We are sorry but the page you are looking for does not exist.</p>
+  </div>
+
+export default NotFound;
+
+export { Header, OpenedPost, NotFound };
