@@ -5,7 +5,7 @@ import './wall.less';
 import Post from './post.jsx';
 import { Header, OpenedPost } from './functional-components';
 import { bindActionCreators } from 'redux';
-import { openPostActon, closePostActon } from '../redux/actions';
+import { openPostActon, closePostActon, dataRecevidedAction } from '../redux/actions';
 
 const urlPath = "https://jsonplaceholder.typicode.com/posts";
 
@@ -23,7 +23,7 @@ class App extends Component {
     validateForm = (login, pass) => {
         const strongPass = new RegExp(this.props.regExpValidator);
 
-        if (/*strongPass.test(pass) &&*/ (login.length > this.props.minPassLength)) {
+        if (strongPass.test(pass) && (login.length > this.props.minPassLength)) {
             this.setState({ invalidLogin: false });
             this.setState({ loggedIn: true });
         }
@@ -42,7 +42,7 @@ class App extends Component {
     transferComplete = (evt) => {
         console.log("The transfer is complete.");
         const posts = JSON.parse(evt.target.response).reverse();
-        this.setState({ posts });
+        this.props.dataRecevidedAction(posts);
     }
 
     transferFailed = (evt) => {
@@ -73,7 +73,7 @@ class App extends Component {
     }
 
     getFilteredPosts = () => {
-        const fitleredPosts = this.state.posts.filter(this.postsFilterFunction);
+        const fitleredPosts = this.props.posts.filter(this.postsFilterFunction);
         const posts = fitleredPosts.map((post) => {
             return (<Post key={post.id} {...post} />);
         });
@@ -95,16 +95,14 @@ class App extends Component {
         }
 
         if (this.state.loggedIn && this.props.wallPostId /*&& this.props.openedPost*/) {
-            console.log(this.props.wallPostId);
-            console.log(this.props);
-            const post = this.state.posts.filter((post) => {
+            const post = this.props.posts.filter((post) => {
                 return post.id == this.props.wallPostId;
             })[0];
             const mergedProps = {...post, closePostAction: this.props.closePostActon}
 
             domElement = <OpenedPost {...mergedProps}/>
         }
-        else if (this.state.loggedIn && this.state.posts.length) {
+        else if (this.state.loggedIn && this.props.posts.length) {
             const posts = this.getFilteredPosts();
             domElement = <div>
                 <Header updateSearch={this.updateSearchString} logOut={this.logOut}/>
@@ -128,7 +126,15 @@ App.defaultProps = {
 };
 
 const mapStateToProps = (state, ownProps) => ({ 
-    openedPost: state.openedPost, wallPostId: ownProps.match.params.postId});
-const mapDispatchToProps = dispatch => bindActionCreators({ openPostActon, closePostActon }, dispatch);
+    openedPost: state.openedPost, 
+    posts: state.posts,
+    wallPostId: ownProps.match.params.postId,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ 
+    openPostActon, 
+    closePostActon, 
+    dataRecevidedAction 
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import './wall.less'
 import classNames from 'classnames/bind';
 
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.login = null;
+    this.pass = null;
   }
 
-
   handleSubmit = event => {
-    event.preventDefault(event.target);
-    this.props.validationCallback(this.login.value, this.pass.value)
+    if (event) {
+      event.preventDefault(event.target);
+      this.props.validationCallback(this.login.value, this.pass.value)
+    }
   }
 
   render() {
