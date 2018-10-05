@@ -1,3 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`App test suite mocked store for App 1`] = `Array []`;
+
+exports[`Post Post should render correctly 1`] = `
+<Post
+  id="1"
+  openPostActon={[Function]}
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+  title="test title"
+/>
+`;

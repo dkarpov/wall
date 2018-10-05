@@ -1,11 +1,12 @@
 import React from 'react';
 import { shallow, } from 'enzyme';
-import toJson from 'enzyme-to-json';
+import toJson, { shallowToJson } from 'enzyme-to-json';
 import configureStore from 'redux-mock-store';
 
 
 import App from '../../src/view/App.jsx';
 import Login from '../../src/view/loginform';
+import Post from '../../src/view/post.jsx';
 
 const mockStore = configureStore();
 const initialState = {
@@ -62,5 +63,12 @@ describe('App test suite', () => {
     expect(wrapper.find('label').hasClass('warning enabled')).toBe(true);
   });
 
+});
+
+describe('Post', () => {
+  test('Post should render correctly', () => {
+    const output = shallow(<Post id='1' title='test title' store={store}/>);
+    expect(shallowToJson(output)).toMatchSnapshot();
+  });
 });
 
